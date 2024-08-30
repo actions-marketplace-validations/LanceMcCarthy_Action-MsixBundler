@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - dev
+    paths:
+      - 'action.yml'
+      - '.github/workflows/dev.yml'
 
 jobs:
   bundle_and_sign:

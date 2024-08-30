@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - 'releases/*'
+    paths:
+      - 'action.yml'
+      - '.github/workflows/release.yml'
 
 jobs:
   bundle_and_sign:
