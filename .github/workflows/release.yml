@@ -21,7 +21,7 @@ jobs:
           $currentDirectory = Get-Location
           $certificatePath = Join-Path -Path $currentDirectory -ChildPath "LancelotSoftware.pfx"
           [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
-          echo "::set-output name=cert_path::$certificatePath"
+          echo "cert_path=$certificatePath" >> $env:GITHUB_OUTPUT
 
       - name: Download test MSIX files
         id: downloader
@@ -42,7 +42,7 @@ jobs:
           Invoke-WebRequest $urlx64 -OutFile $x64FilePath
 
           echo "All MSIX files downloaded to $packagesFolder."
-          echo "::set-output name=msixes_folder::$packagesFolder"
+          echo "msixes_folder=$packagesFolder" >> $env:GITHUB_OUTPUT
           
       - name: Copy MSIX files to empty folder to emulate copying build results
         id: gather
@@ -100,9 +100,9 @@ jobs:
           $bundleFilePath = Join-Path -Path $msixBundlesFolder -ChildPath $bfn
           echo "Bundle file path set to: $bundleFilePath."
           
-          echo "::set-output name=msix_folderpath::$tempMsixFolder"
-          echo "::set-output name=msixbundle_filepath::$bundleFilePath"
-          echo "::set-output name=msixbundle_version::$bundleVersion"
+          echo "msix_folderpath=$tempMsixFolder" >> $env:GITHUB_OUTPUT
+          echo "msixbundle_filepath=$bundleFilePath" >> $env:GITHUB_OUTPUT
+          echo "msixbundle_version=$bundleVersion" >> $env:GITHUB_OUTPUT
 
       - name: Verify Gather Output
         shell: pwsh
