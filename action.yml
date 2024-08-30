@@ -157,4 +157,4 @@ runs:
         }
 
         # Set the output variable
-        echo "::set-output name=final_path::$BundleFilePath"
+        echo "final_path=$BundleFilePath" >> $env:GITHUB_OUTPUT
