@@ -29,18 +29,18 @@ The action will copy the file path to an output variable that you can use in sub
 |----------|--------|
 | `msixbundle_path` | The absolute file path to the generated msixbundle file. |
 
-In the following example, notice how the step has the id of `bundler`. In the next step, we can get the output value of `msixbundle_path` using the `${{ steps.bundler.outputs.msixbundle_path }}` syntax.
+In the following example, notice how the step has the id of `bundler`. In the next step, we can get the output value of `msixbundle_path` using the `${{steps.bundler.outputs.msixbundle_path}}` syntax.
 
 ```yaml
   - name: Make msixbundle
     id: bundler
-    uses: LanceMcCarthy/Action-MsixBundler@v1.0.0
+    uses: LanceMcCarthy/Action-MsixBundler@v2.0.0
       ...
   
   - name: Verify msixbundle File Path
     shell: pwsh
     run: |
-      $path_to_my_msix_bundle = "${{ steps.bundler.outputs.msixbundle_path }}"
+      $path_to_my_msix_bundle = "${{steps.bundler.outputs.msixbundle_path}}"
       Write-Output $path_to_my_msix_bundle
 ```
 
@@ -59,7 +59,7 @@ The most common expected use of this is to bundle all the msix files and then si
     id: savepfx
     shell: pwsh
     run: |
-      $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.PFX_BASE64 }}")
+      $pfx_cert_byte = [System.Convert]::FromBase64String("${{secrets.PFX_BASE64}}")
       $currentDirectory = Get-Location
       $certificatePath = Join-Path -Path $currentDirectory -ChildPath "MyCertificate.pfx"
       [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
@@ -68,19 +68,19 @@ The most common expected use of this is to bundle all the msix files and then si
       
   - name: Make msixbundle
     id: bundler
-    uses: LanceMcCarthy/Action-MsixBundler@vX.X.X
+    uses: LanceMcCarthy/Action-MsixBundler@v2.0.0
     with:
       msix-folder: "C:\MyApp\OnlyMsixFilesFolder"
       msixbundle-filepath: "C:\MyApp\MyApp_1.0.0.0_x86_x64.msixbundle"
       msixbundle-version: "1.0.0.0"
       enable-bundle-signing: true
-      certificate-path: ${{ steps.savepfx.outputs.cert_path }}
-      certificate-private-key: ${{ secrets.PFX_PRIVATE_KEY }}
+      certificate-path: ${{steps.savepfx.outputs.cert_path}}
+      certificate-private-key: ${{secrets.PFX_PRIVATE_KEY}}
       
   - name: Verify msixbundle File Path
     shell: pwsh
     run: |
-      $path_to_my_msix_bundle = ${{ steps.bundler.outputs.msixbundle_path }}"
+      $path_to_my_msix_bundle = ${{steps.bundler.outputs.msixbundle_path}}"
       Write-Output $path_to_my_msix_bundle
 ```
 
@@ -94,7 +94,7 @@ If you want to just bundle everything without signing, it just pass the three re
 
   - name: Make msixbundle
     id: bundler
-    uses: LanceMcCarthy/Action-MsixBundler@v1.0.0
+    uses: LanceMcCarthy/Action-MsixBundler@v2.0.0
     with:
       msix-folder: "C:\MyApp\OnlyMsixFilesFolder"
       msixbundle-filepath: "C:\MyApp\MyApp_1.0.0.0_x86_x64.msixbundle"
@@ -103,14 +103,14 @@ If you want to just bundle everything without signing, it just pass the three re
   - name: Verify msixbundle File Path
     shell: pwsh
     run: |
-      $path_to_my_msix_bundle = ${{ steps.bundler.outputs.msixbundle_path }}"
+      $path_to_my_msix_bundle = ${{steps.bundler.outputs.msixbundle_path}}"
       Write-Output $path_to_my_msix_bundle
 ```
 
 
-## Important
+## Important Notes
 
-If you need to use a environment variable for a `with` input, you must use the `${{ env.Name }}` syntax and **not** `$env:Name`. See [GitHub Contexts](https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#contexts) documentation for more help.
+If you need to use a environment variable for a `with` input, you must use the `${{env.Name}}` syntax and **not** `$env:Name`. See [GitHub Contexts](https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#contexts) documentation for more help.
 
 ### Using Environment Variables
 
@@ -119,7 +119,7 @@ For example:
 ```yaml
 with:
   property-name: $env:MyVariable # Does NOT work for inputs
-  property-name: ${{ env.MyVariable }} # Works.
+  property-name: ${{env.MyVariable}} # Works.
 ```
 
 ### Using Output Variables (recommended)
@@ -134,9 +134,9 @@ It is safer and more reliable if you use a job **output** variable from a previo
       echo "::set-output name=selected_color::$color"
       
   - id: bundler
-    uses: LanceMcCarthy/Action-MsixBundler@v1.0.0
+    uses: LanceMcCarthy/Action-MsixBundler@v2.0.0
     with:
-      property-name: ${{ steps.create-color.outputs.selected_color }}
+      property-name: ${{steps.create-color.outputs.selected_color}}
 ```
 This is the option GitHub recommends instead of using job-wide environment variables that may contain sensitive information.
 
