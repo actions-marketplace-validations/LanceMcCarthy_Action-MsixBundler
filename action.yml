@@ -18,9 +18,9 @@ inputs:
     required: true
     default: '0.0.0.0'
   sdk-version:
-    description: 'The version of makeappx.exe and signtool.exe (default is 10.0.19041.0).'
+    description: 'The version of makeappx.exe and signtool.exe (default is 10.0.26100.0).'
     required: false
-    default: '10.0.19041.0'
+    default: '10.0.26100.0'
   architecture:
     description: 'The architecture version of makeappx.exe to use (default is x86).'
     required: false
