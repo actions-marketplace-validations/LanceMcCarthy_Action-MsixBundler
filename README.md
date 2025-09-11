@@ -15,7 +15,7 @@ Below are the action's inputs that need to be defined in the Action's `with` blo
 | ✔ | `msixbundle-filepath` | none| The absolute file path to be used for the .msixbundle. For example, C:\MyFolder\MyApp_1.0.0.0_x86_x64.msixbundle. |
 | ✔ | `msixbundle-version` | 0.0.0.0 | Specifies the version number of the bundle. The version number MUST be in four parts separated by periods in the form: `<Major>.<Minor>.<Build>.<Revision>`. |
 |  | `architecture` | x86 | The architecture version of MakeAppx.exe and SignTool.exe to use. |
-|  | `sdk-version` | 10.0.19041.0 | The version of MakeAppx.exe and SignTool.exe to use. |
+|  | `sdk-version` | 10.0.26100.0 | The version of MakeAppx.exe and SignTool.exe to use, you can revert to an older one by changing this. |
 |  | `enable-bundle-signing` | false | Enables signing of the msixbundle by using signTool.exe after the bundle is created (the individual msix files do not need to be signed fore this to work) |
 |  | `certificate-path` | none | Path to the code signing certificate (i.e., the PFX file). This value must be set if you have enabled signing. |
 |  | `certificate-private-key` | none | The private key (password) for the PFX. This value must be set if you have enabled signing. |
@@ -34,7 +34,7 @@ In the following example, notice how the step has the id of `bundler`. In the ne
 ```yaml
   - name: Make msixbundle
     id: bundler
-    uses: LanceMcCarthy/Action-MsixBundler@v2.0.0
+    uses: LanceMcCarthy/Action-MsixBundler@v3
       ...
   
   - name: Verify msixbundle File Path
@@ -68,7 +68,7 @@ The most common expected use of this is to bundle all the msix files and then si
       
   - name: Make msixbundle
     id: bundler
-    uses: LanceMcCarthy/Action-MsixBundler@v2.0.0
+    uses: LanceMcCarthy/Action-MsixBundler@v3
     with:
       msix-folder: "C:\MyApp\OnlyMsixFilesFolder"
       msixbundle-filepath: "C:\MyApp\MyApp_1.0.0.0_x86_x64.msixbundle"
@@ -94,7 +94,7 @@ If you want to just bundle everything without signing, it just pass the three re
 
   - name: Make msixbundle
     id: bundler
-    uses: LanceMcCarthy/Action-MsixBundler@v2.0.0
+    uses: LanceMcCarthy/Action-MsixBundler@v3
     with:
       msix-folder: "C:\MyApp\OnlyMsixFilesFolder"
       msixbundle-filepath: "C:\MyApp\MyApp_1.0.0.0_x86_x64.msixbundle"
@@ -131,12 +131,10 @@ It is safer and more reliable if you use a job **output** variable from a previo
     shell: pwsh
     run: |
       $color = "Green"
-      echo "::set-output name=selected_color::$color"
+      echo "selected_color=$color" >> $env:GITHUB_OUTPUT
       
   - id: bundler
-    uses: LanceMcCarthy/Action-MsixBundler@v2.0.0
+    uses: LanceMcCarthy/Action-MsixBundler@v3
     with:
       property-name: ${{steps.create-color.outputs.selected_color}}
 ```
-This is the option GitHub recommends instead of using job-wide environment variables that may contain sensitive information.
-
